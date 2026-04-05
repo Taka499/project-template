@@ -1,12 +1,16 @@
 # Execution Plans (ExecPlans):
 
-This document describes the requirements for an execution plan ("ExecPlan"), a design document that a coding agent can follow to deliver a working feature or system change. Treat the reader as a complete beginner to this repository: they have only the current working tree and the single ExecPlan file you provide. There is no memory of prior plans and no external context.
+An ExecPlan is the persistence layer for cross-session development with a coding agent. Every new session starts with an empty context window — no memory of what was tried, decided, or discovered in prior sessions. The ExecPlan is the single artifact that bridges that gap. It carries forward everything a fresh session needs to continue the work: what the goal is, what has been done, what remains, what was tried and abandoned, and why every decision was made.
+
+Throughout this document, "the reader" or "novice" means a coding agent in a fresh session. The agent has the current working tree and git history, but no memory of prior sessions. The ExecPlan is the only artifact that preserves the narrative of the work — what the codebase alone cannot tell you.
 
 ## How to use ExecPlans and PLANS.md
 
+Not every task warrants an ExecPlan. If the scope is unclear, start with a quick read-only exploration of the codebase and a conversation with the user about whether the work is complex enough to need a formal plan. That conversation is ephemeral — it produces no artifact — so never use it as a substitute for the ExecPlan's own exploration milestones. If a task does warrant an ExecPlan, start writing one immediately; embed uncertainty and exploration into its early milestones rather than conducting research in a separate phase that goes unrecorded.
+
 When authoring an executable specification (ExecPlan), follow PLANS.md _to the letter_. If it is not in your context, refresh your memory by reading the entire PLANS.md file. Be thorough in reading (and re-reading) source material to produce an accurate specification. When creating a spec, start from the skeleton and flesh it out as you do your research.
 
-When implementing an executable specification (ExecPlan), do not prompt the user for "next steps"; simply proceed to the next milestone. Keep all sections up to date, add or split entries in the list at every stopping point to affirmatively state the progress made and next steps. Resolve ambiguities autonomously, and commit frequently.
+When implementing an executable specification (ExecPlan), do not prompt the user for "next steps"; simply proceed to the next milestone. Keep all sections up to date, add or split entries in the list at every stopping point to affirmatively state the progress made and next steps. Resolve ambiguities autonomously, and commit frequently. When the agent supports task tracking, create a task for each milestone and mark it complete on finishing, giving the user live visibility into progress. For large plans with independent milestones, consider delegating milestones to parallel agents running in isolated working copies so they can proceed without conflicts.
 
 When discussing an executable specification (ExecPlan), record decisions in a log in the spec for posterity; it should be unambiguously clear why any change to the specification was made. ExecPlans are living documents, and it should always be possible to restart from _only_ the ExecPlan and no other work.
 
@@ -24,7 +28,7 @@ NON-NEGOTIABLE REQUIREMENTS:
 
 Purpose and intent come first. Begin by explaining, in a few sentences, why the work matters from a user's perspective: what someone can do after this change that they could not do before, and how to see it working. Then guide the reader through the exact steps to achieve that outcome, including what to edit, what to run, and what they should observe.
 
-The agent executing your plan can list files, read files, search, run the project, and run tests. It does not know any prior context and cannot infer what you meant from earlier milestones. Repeat any assumption you rely on. Do not point to external blogs or docs; if knowledge is required, embed it in the plan itself in your own words. If an ExecPlan builds upon a prior ExecPlan and that file is checked in, incorporate it by reference. If it is not, you must include all relevant context from that plan.
+The agent executing your plan can read, write, and edit files; search code with regex and glob patterns; run shell commands including builds, tests, and servers; and perform git operations (branching, committing, diffing). It may also have additional capabilities such as web search, code intelligence, or the ability to delegate work to parallel agents. Despite these capabilities, it starts each session stateless — it does not remember prior sessions and cannot infer what you meant from earlier milestones. Repeat any assumption you rely on. Do not point to external blogs or docs; if knowledge is required, embed it in the plan itself in your own words. If an ExecPlan builds upon a prior ExecPlan and that file is checked in, incorporate it by reference. If it is not, you must include all relevant context from that plan.
 
 ## Formatting
 
@@ -61,12 +65,12 @@ Each milestone must be independently verifiable and incrementally implement the 
 * ExecPlans are living documents. As you make key design decisions, update the plan to record both the decision and the thinking behind it. Record all decisions in the `Decision Log` section.
 * ExecPlans must contain and maintain a `Progress` section, a `Surprises & Discoveries` section, a `Decision Log`, and an `Outcomes & Retrospective` section. These are not optional.
 * When you discover optimizer behavior, performance tradeoffs, unexpected bugs, or inverse/unapply semantics that shaped your approach, capture those observations in the `Surprises & Discoveries` section with short evidence snippets (test output is ideal).
-* If you change course mid-implementation, document why in the `Decision Log` and reflect the implications in `Progress`. Plans are guides for the next contributor as much as checklists for you.
+* If you change course mid-implementation, document why in the `Decision Log` and reflect the implications in `Progress`. Plans are guides for the next session as much as checklists for the current one.
 * At completion of a major task or the full plan, write an `Outcomes & Retrospective` entry summarizing what was achieved, what remains, and lessons learned.
 
 # Prototyping milestones and parallel implementations
 
-It is acceptable—-and often encouraged—-to include explicit prototyping milestones when they de-risk a larger change. Examples: adding a low-level operator to a dependency to validate feasibility, or exploring two composition orders while measuring optimizer effects. Keep prototypes additive and testable. Clearly label the scope as “prototyping”; describe how to run and observe results; and state the criteria for promoting or discarding the prototype.
+It is acceptable—-and often encouraged—-to include explicit prototyping milestones when they de-risk a larger change. Examples: adding a low-level operator to a dependency to validate feasibility, or exploring two composition orders while measuring optimizer effects. Keep prototypes additive and testable. Clearly label the scope as “prototyping”; describe how to run and observe results; and state the criteria for promoting or discarding the prototype. When the agent supports isolated working copies (such as git worktrees), prototyping milestones can run in isolation so experimental code never touches the main working tree. Note this in the ExecPlan when a milestone's changes are speculative.
 
 Prefer additive code changes followed by subtractions that keep tests passing. Parallel implementations (e.g., keeping an adapter alongside an older path during migration) are fine when they reduce risk or enable tests to continue passing during a large migration. Describe how to validate both paths and how to retire one safely with tests. When working with multiple new libraries or feature areas, consider creating spikes that evaluate the feasibility of these features _independently_ of one another, proving that the external library performs as expected and implements the features we need in isolation.
 
@@ -114,7 +118,7 @@ Summarize outcomes, gaps, and lessons learned at major milestones or at completi
 
 ## Context and Orientation
 
-Describe the current state relevant to this task as if the reader knows nothing. Name the key files and modules by full path. Define any non-obvious term you will use. Do not refer to prior plans.
+Describe the current state relevant to this task as if the reader has no memory of prior sessions. Name the key files and modules by full path. Define any non-obvious term you will use. If this plan builds on a prior ExecPlan that is checked into the repository, reference it by path — but do not assume the reader has read it; summarize the relevant context here.
 
 ## Plan of Work
 
@@ -147,6 +151,6 @@ In crates/foo/planner.rs, define:
     }
 ```
 
-If you follow the guidance above, a single, stateless agent -- or a human novice -- can read your ExecPlan from top to bottom and produce a working, observable result. That is the bar: SELF-CONTAINED, SELF-SUFFICIENT, NOVICE-GUIDING, OUTCOME-FOCUSED.
+If you follow the guidance above, a stateless coding agent in a fresh session can read your ExecPlan from top to bottom, understand the full history and current state of the work, and either continue where the last session left off or produce a working result from scratch. That is the bar: SELF-CONTAINED, SESSION-BRIDGING, OUTCOME-FOCUSED.
 
 When you revise a plan, you must ensure your changes are comprehensively reflected across all sections, including the living document sections, and you must write a note at the bottom of the plan describing the change and the reason why. ExecPlans must describe not just the what but the why for almost everything.
