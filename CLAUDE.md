@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # ExecPlans
 
-When writing complex features or significant refactors, use an ExecPlan (as described in _docs/PLANS.md) from design to implementation.
+When writing complex features or significant refactors, use an ExecPlan (as described in docs/PLANS.md) from design to implementation.
+
+Project documentation lives in `docs/`. When creating or updating plans, ExecPlans, or design docs, save them there. Reference existing docs in `docs/` for context on project phases and milestones.
+
+ALL the documents should be self-contained. Any concept that originated outside the document set should be either explained inline or cross-referenced to a specific section in another doc in the set.
 
 ## Project Overview
 
