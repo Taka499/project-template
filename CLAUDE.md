@@ -1,26 +1,41 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to a coding agent when working with code in this repository.
 
-# ExecPlans
-
-When writing complex features or significant refactors, use an ExecPlan (as described in docs/PLANS.md) from design to implementation.
+## Documentation
 
 Project documentation lives in `docs/`. When creating or updating plans, ExecPlans, or design docs, save them there. Reference existing docs in `docs/` for context on project phases and milestones.
 
-ALL the documents should be self-contained. Any concept that originated outside the document set should be either explained inline or cross-referenced to a specific section in another doc in the set.
+Every document should be self-sufficient: the reader should never need to hunt for context. Explain concepts inline. When a concept is already defined in another checked-in document, you may reference it by file path and section rather than repeating it — but the reference must be precise enough that the reader can find it immediately (e.g., "see `docs/PLANS.md` § Milestones"), not vague ("see the architecture doc").
+
+## ExecPlans
+
+When writing complex features or significant refactors, use an ExecPlan (as described in `docs/PLANS.md`) from design to implementation. ExecPlans are the persistence layer for cross-session development — they carry forward all context, decisions, and progress so that a fresh session can continue the work without loss.
 
 ## Project Overview
 
-to be updated
+<!-- Describe what this project does, who it serves, and what problem it solves. -->
 
-## COMMIT DISCIPLINE
-- Follow Git-flow workflow to manage the branches
-- Use small, frequent commits rather than large, infrequent ones
-- Only add and commit affected files. Keep untracked other files as are
-- Never add Claude Code attribution in commit
+## Architecture
+
+<!-- Describe the high-level structure: key directories, how components relate, data flow. Name the main entry points. -->
 
 ## Setup and Development
 
-to be updated
+<!-- How to install dependencies, configure the environment, and run the project locally. Include exact commands. -->
+
+## Build and Test
+
+<!-- List the commands to build, test, lint, and format. Show expected output for a clean run. -->
+
+## Code Style
+
+<!-- Language-specific conventions, naming patterns, import ordering, or formatting tools in use. -->
+
+## Commit Discipline
+
+- Follow Git-flow workflow to manage the branches
+- Use small, frequent commits rather than large, infrequent ones
+- Only add and commit affected files; leave untracked files as they are
+- Never add coding agent attribution in commits
 
