@@ -2,6 +2,10 @@
 
 This file provides guidance to a coding agent when working with code in this repository.
 
+## Central Configuration
+
+This template carries only the project-scoped scaffold: this CLAUDE.md skeleton, `docs/PLANS.md` (ExecPlan methodology), and `docs/adr/README.md` (ADR convention). Cross-project rules and the generic workflow skills (`grill-me`, `close-out`, `codebase-design`, `adopt-from-sibling`, `harvest-session`) live in the central `Taka499/claude` repository, deployed user-level at `~/.claude` — do not copy them into projects.
+
 ## Documentation
 
 Project documentation lives in `docs/`. When creating or updating plans, ExecPlans, or design docs, save them there. Reference existing docs in `docs/` for context on project phases and milestones.
