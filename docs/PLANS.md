@@ -1,5 +1,7 @@
 # Execution Plans (ExecPlans):
 
+> **This copy is synced from `Taka499/claude` `docs/PLANS.md`, which is canonical.** It is checked in here so that an ExecPlan stays followable from a fresh clone of a project, on a machine with no `~/.claude` deployed — which is the same self-containment this document demands of the plans themselves. Edit the canonical copy and propagate the change here; never the other way round, or the two drift with no rule saying which wins. On a machine where the central config is deployed, `~/.claude/docs/PLANS.md` is this same document, and it is what applies in a project that has not checked in a copy of its own.
+
 An ExecPlan is the persistence layer for cross-session development with a coding agent. Every new session starts with an empty context window — no memory of what was tried, decided, or discovered in prior sessions. The ExecPlan is the single artifact that bridges that gap. It carries forward everything a fresh session needs to continue the work: what the goal is, what has been done, what remains, what was tried and abandoned, and why every decision was made.
 
 Throughout this document, "the reader" or "novice" means a coding agent in a fresh session. The agent has the current working tree and git history, but no memory of prior sessions. The ExecPlan is the only artifact that preserves the narrative of the work — what the codebase alone cannot tell you.
